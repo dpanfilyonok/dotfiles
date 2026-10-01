@@ -1,0 +1,7 @@
+{{- /* skillshare keeps its global config in %APPDATA% on Windows and in
+       ~/.config elsewhere. Each machine gets exactly one of the two. */ -}}
+{{ if eq .chezmoi.os "windows" }}
+.config/skillshare
+{{ else }}
+AppData
+{{ end }}

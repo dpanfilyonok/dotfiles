@@ -1,0 +1,39 @@
+# Global skillshare layer: skills every project on this machine gets.
+# Pin each one with a tag or a full commit, never a moving branch.
+# Changing this list makes chezmoi rerun the install script on next apply.
+skills:
+  # Searching for new skills is the owner's call, not agent work in a project.
+  # Same commit as projects that also declare it: one skill in two layers
+  # is allowed only at one version.
+  - name: find-skills
+    source: github.com/vercel-labs/skills/skills/find-skills
+    ref: 435076e78988e1e6ec40d00b0b1d76bdbbc5419a
+
+  # Skill of a tool lives where the tool is declared, pinned to the tool's
+  # version. Keep ref equal to `skillshare version`.
+  - name: skillshare
+    source: github.com/runkids/skillshare/skills/skillshare
+    ref: v0.23.0
+
+  # Personal bundle from agent-kit.
+  - name: my-human-brief
+    source: github.com/dpanfilyonok/agent-kit/bundles/personal/my-human-brief
+    ref: v0.1.0
+  - name: my-human-text
+    source: github.com/dpanfilyonok/agent-kit/bundles/personal/my-human-text
+    ref: v0.1.0
+  - name: my-plain-punctuation
+    source: github.com/dpanfilyonok/agent-kit/bundles/personal/my-plain-punctuation
+    ref: v0.1.0
+
+  # Orca is installed on this machine only, so its skills are declared here.
+  # Keep ref equal to `orca --version` with a v prefix.
+  - name: orca-cli
+    source: github.com/stablyai/orca/skills/orca-cli
+    ref: v1.4.217
+  - name: orca-linear
+    source: github.com/stablyai/orca/skills/orca-linear
+    ref: v1.4.217
+  - name: orchestration
+    source: github.com/stablyai/orca/skills/orchestration
+    ref: v1.4.217

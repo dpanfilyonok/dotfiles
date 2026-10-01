@@ -1,0 +1,7 @@
+{{- /* chezmoi runs scripts by extension, and Windows knows no interpreter
+       for .sh. Take Git for Windows bash next to git itself: a plain "bash"
+       on PATH may resolve to WSL. */ -}}
+{{- if eq .chezmoi.os "windows" }}
+[interpreters.sh]
+    command = {{ joinPath (output "git" "--exec-path" | trim) ".." ".." ".." "bin" "bash.exe" | quote }}
+{{- end }}

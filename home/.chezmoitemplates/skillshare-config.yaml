@@ -1,0 +1,30 @@
+{{- $base := joinPath .chezmoi.homeDir ".config" "skillshare" -}}
+{{- if eq .chezmoi.os "windows" -}}
+{{-   $base = joinPath (env "APPDATA" | replace "\\" "/") "skillshare" -}}
+{{- end -}}
+# Managed by chezmoi from github.com/dpanfilyonok/dotfiles. Edit the source,
+# not this file. The skill list lives in .chezmoidata/skills.yaml there:
+# skillshare keeps installed skills in skills/.metadata.json, not here.
+sources:
+  skills: {{ joinPath $base "skills" }}
+  agents: {{ joinPath $base "agents" }}
+mode: copy
+targets:
+  claude:
+    skills:
+      path: {{ joinPath .chezmoi.homeDir ".claude" "skills" }}
+  codex:
+    skills:
+      path: {{ joinPath .chezmoi.homeDir ".codex" "skills" }}
+  cursor:
+    skills:
+      path: {{ joinPath .chezmoi.homeDir ".cursor" "skills" }}
+  universal:
+    skills:
+      path: {{ joinPath .chezmoi.homeDir ".agents" "skills" }}
+ignore:
+  - .DS_Store
+  - .git/
+  - __pycache__/
+audit:
+  block_threshold: CRITICAL
