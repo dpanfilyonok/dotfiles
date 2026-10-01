@@ -1,0 +1,6 @@
+#!/bin/sh
+# Compare same-named skills of the global layer with the local projects after
+# every apply. A mismatch is reported, not fatal: the projects own their pins,
+# and apply must not wait for every project to catch up.
+sh {{ joinPath .chezmoi.workingTree "bin" "check-skill-versions.sh" | replace "\\" "/" | quote }} ||
+  echo "check-skill-versions: mismatch above; apply itself succeeded" >&2

@@ -1,0 +1,8 @@
+# Local hooks. Install once per clone: lefthook install
+pre-commit:
+  commands:
+    gitleaks:
+      run: gitleaks git --pre-commit --staged --redact --no-banner
+    check-skill-versions-test:
+      glob: "bin/**"
+      run: sh bin/check-skill-versions-test.sh

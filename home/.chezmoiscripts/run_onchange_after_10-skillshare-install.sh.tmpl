@@ -1,0 +1,34 @@
+#!/bin/sh
+# Install the skills from .chezmoidata/skills.yaml into the global skillshare
+# source and sync them to targets. chezmoi reruns this script whenever its
+# rendered text changes, that is whenever the skill list changes.
+set -eu
+. {{ joinPath .chezmoi.workingTree "bin" "lib" "skillshare.sh" | replace "\\" "/" | quote }}
+
+meta=$(global_metadata)
+
+# ensure installs a skill at ref unless it is already there. A skill at
+# another ref, or one installed without a pin, is removed first: install
+# refuses to overwrite without --force, and --force also skips the audit gate.
+ensure() {
+  name=$1 source=$2 ref=$3
+  current=$(jq -r --arg n "$name" '.entries[$n].branch // empty' "$meta" 2>/dev/null || true)
+  [ "$current" = "$ref" ] && return 0
+  if [ -n "$(jq -r --arg n "$name" '.entries[$n] // empty' "$meta" 2>/dev/null || true)" ]; then
+    skillshare uninstall -g --force "$name"
+  fi
+  skillshare install -g "$source" --branch "$ref"
+}
+{{ range .skills }}
+ensure {{ .name | quote }} {{ .source | quote }} {{ .ref | quote }}
+{{- end }}
+
+# A skill installed by hand stays: removing it is the owner's call. Name it so
+# it does not live on unnoticed.
+undeclared=$(jq -r '.entries | keys[]' "$meta" | grep -vxF{{ range .skills }} -e {{ .name | quote }}{{ end }} || true)
+if [ -n "$undeclared" ]; then
+  echo "skillshare: installed but not declared in dotfiles:" >&2
+  printf '  %s\n' $undeclared >&2
+fi
+
+skillshare sync -g
